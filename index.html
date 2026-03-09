@@ -21,7 +21,6 @@ html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:var(--M);line-height:1.6;overflow-x:hidden;cursor:crosshair}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,255,65,.03) 2px,rgba(0,255,65,.03) 4px);pointer-events:none;z-index:9000}
 body::before{content:'';position:fixed;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--red) 30%,var(--red-hi) 50%,var(--red) 70%,transparent);box-shadow:0 0 20px var(--red),0 0 40px rgba(0,255,65,.3);z-index:9001}
-/* rolling scan line */
 body .scanline{position:fixed;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(0,255,65,.15),transparent);animation:scandown 6s linear infinite;pointer-events:none;z-index:8999}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:#000}
@@ -170,16 +169,6 @@ section{padding:5rem 2.5rem;position:relative;z-index:2}
 .priv-item h3{font-family:var(--D);font-size:.74rem;font-weight:700;color:var(--red);letter-spacing:.05em;text-transform:uppercase;margin-bottom:.35rem}
 .priv-item p{font-size:.76rem;color:var(--soft);line-height:1.7}
 
-.sponsor-bar{background:rgba(0,0,0,.9);border-top:1px solid rgba(204,0,0,.2);border-bottom:1px solid rgba(204,0,0,.1);padding:1.4rem 2.5rem;position:relative;z-index:2}
-.sponsor-label{font-family:var(--D);font-size:.55rem;letter-spacing:.22em;color:var(--muted);text-align:center;margin-bottom:1.1rem;text-transform:uppercase}
-.sponsor-label::before,.sponsor-label::after{content:'──';margin:0 .6rem;color:var(--red-dim)}
-.sponsor-list{display:flex;align-items:center;justify-content:center;gap:2.5rem;flex-wrap:wrap}
-.sponsor-item{display:flex;flex-direction:column;align-items:center;gap:.45rem;opacity:.55;transition:opacity .3s,filter .3s;filter:grayscale(40%)}
-.sponsor-item:hover{opacity:1;filter:grayscale(0%)}
-.sponsor-logo{width:46px;height:46px;display:flex;align-items:center;justify-content:center}
-.sponsor-name{font-family:var(--D);font-size:.52rem;letter-spacing:.1em;color:var(--muted);text-align:center;text-transform:uppercase;max-width:90px;line-height:1.3}
-.sponsor-divider{width:1px;height:38px;background:linear-gradient(to bottom,transparent,var(--red-dim),transparent);opacity:.4}
-
 #music{position:fixed;bottom:24px;right:24px;z-index:800;background:rgba(4,0,0,.97);border:1px solid rgba(204,0,0,.4);padding:14px 16px;width:230px;box-shadow:0 8px 32px rgba(0,0,0,.8),0 0 20px rgba(204,0,0,.12);font-family:var(--M)}
 .music-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .music-label{font-size:.62rem;color:var(--red);letter-spacing:.15em}
@@ -313,7 +302,7 @@ footer{background:#000;border-top:1px solid rgba(204,0,0,.18);padding:2rem 2.5re
     </div>
     <div class="lock-agency">Sri Lanka Police · Child Safety Reporter</div>
     <div class="lock-title">FREQUENCY LOCK</div>
-    <div class="lock-hz">20568 Hz</div>
+    <div class="lock-hz">4009HXDZ</div>
     <div class="lock-sub">// ENTER ACCESS FREQUENCY TO PROCEED //</div>
     <div class="lock-input-wrap">
       <input type="password" id="lockInput" placeholder="_ _ _ _ _ _ _ _" autocomplete="off" spellcheck="false" onkeydown="lockKeyDown(event)">
@@ -579,75 +568,6 @@ footer{background:#000;border-top:1px solid rgba(204,0,0,.18);padding:2rem 2.5re
   <div class="music-note">Opens in new tab</div>
 </div>
 
-<!-- SPONSOR BAR -->
-<div class="sponsor-bar">
-  <div class="sponsor-label">IN PARTNERSHIP WITH</div>
-  <div class="sponsor-list">
-    <div class="sponsor-item" title="Sri Lanka Police">
-      <div class="sponsor-logo">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="46" height="46">
-          <path d="M50 4 L90 20 L90 52 C90 74 72 90 50 96 C28 90 10 74 10 52 L10 20 Z" fill="rgba(0,30,100,0.85)" stroke="#8899cc" stroke-width="1.5"/>
-          <text x="50" y="87" text-anchor="middle" font-family="serif" font-size="5.5" fill="#aabbee" letter-spacing="0.5">SRI LANKA POLICE</text>
-          <text x="50" y="20" text-anchor="middle" font-size="7" fill="#ffcc00" opacity="0.8">★ ★ ★</text>
-        </svg>
-      </div>
-      <div class="sponsor-name">Sri Lanka Police</div>
-    </div>
-    <div class="sponsor-divider"></div>
-    <div class="sponsor-item" title="Sri Lanka Army">
-      <div class="sponsor-logo">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="46" height="46">
-          <circle cx="50" cy="50" r="46" fill="rgba(60,20,0,0.7)" stroke="#885533" stroke-width="1.5"/>
-          <text x="50" y="58" text-anchor="middle" font-family="serif" font-size="30" fill="#cc7700" opacity="0.9">⚔</text>
-          <path id="armyArc" d="M 20,72 A 32,32 0 0,0 80,72" fill="none"/>
-          <text font-family="serif" font-size="5.5" fill="#cc9944" letter-spacing="0.8"><textPath href="#armyArc" startOffset="10%">SRI LANKA ARMY</textPath></text>
-        </svg>
-      </div>
-      <div class="sponsor-name">Sri Lanka Army</div>
-    </div>
-    <div class="sponsor-divider"></div>
-    <div class="sponsor-item" title="NCMEC">
-      <div class="sponsor-logo">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="46" height="46">
-          <rect x="5" y="5" width="90" height="90" rx="8" fill="rgba(0,40,120,0.75)" stroke="#3355aa" stroke-width="1.5"/>
-          <circle cx="50" cy="30" r="11" fill="#4488ff" opacity="0.85"/>
-          <path d="M32,70 C32,52 40,44 50,44 C60,44 68,52 68,70 Z" fill="#4488ff" opacity="0.85"/>
-          <path d="M22,58 C22,35 78,35 78,58" fill="none" stroke="#ffcc00" stroke-width="2.5" stroke-linecap="round" opacity="0.8"/>
-          <text x="50" y="87" text-anchor="middle" font-family="sans-serif" font-size="6" font-weight="bold" fill="#6699ff" letter-spacing="0.5">NCMEC</text>
-        </svg>
-      </div>
-      <div class="sponsor-name">NCMEC</div>
-    </div>
-    <div class="sponsor-divider"></div>
-    <div class="sponsor-item" title="Internet Watch Foundation">
-      <div class="sponsor-logo">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="46" height="46">
-          <rect x="5" y="5" width="90" height="90" rx="8" fill="rgba(0,60,30,0.75)" stroke="#336644" stroke-width="1.5"/>
-          <circle cx="50" cy="48" r="28" fill="none" stroke="#44aa66" stroke-width="1.8" opacity="0.9"/>
-          <ellipse cx="50" cy="48" rx="14" ry="28" fill="none" stroke="#44aa66" stroke-width="1.2" opacity="0.6"/>
-          <line x1="22" y1="48" x2="78" y2="48" stroke="#44aa66" stroke-width="1.2" opacity="0.6"/>
-          <text x="50" y="87" text-anchor="middle" font-family="sans-serif" font-size="6" font-weight="bold" fill="#55cc77" letter-spacing="0.5">IWF</text>
-        </svg>
-      </div>
-      <div class="sponsor-name">Internet Watch Foundation</div>
-    </div>
-    <div class="sponsor-divider"></div>
-    <div class="sponsor-item" title="Interpol">
-      <div class="sponsor-logo">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="46" height="46">
-          <circle cx="50" cy="50" r="45" fill="rgba(0,20,80,0.8)" stroke="#2244aa" stroke-width="1.5"/>
-          <ellipse cx="50" cy="50" rx="18" ry="32" fill="none" stroke="#3366cc" stroke-width="1" opacity="0.6"/>
-          <ellipse cx="50" cy="50" rx="32" ry="12" fill="none" stroke="#3366cc" stroke-width="1" opacity="0.4"/>
-          <line x1="50" y1="20" x2="50" y2="70" stroke="#aabbff" stroke-width="2.2" stroke-linecap="round" opacity="0.85"/>
-          <path d="M44,26 L56,26" stroke="#aabbff" stroke-width="2" stroke-linecap="round" opacity="0.7"/>
-          <text x="50" y="92" text-anchor="middle" font-family="sans-serif" font-size="5.5" font-weight="bold" fill="#6688ee" letter-spacing="0.5">INTERPOL</text>
-        </svg>
-      </div>
-      <div class="sponsor-name">Interpol</div>
-    </div>
-  </div>
-</div>
-
 <!-- FOOTER -->
 <footer>
   <div>
@@ -669,7 +589,7 @@ var ls={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}
 
 /* ══ LOCK SCREEN JS ══ */
 (function(){
-  var PASS='20568Hz';
+  var PASS='4009HXDZ';
   var maxTries=5,tries=0,locked=true;
 
   /* lock rain */
@@ -679,7 +599,7 @@ var ls={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}
       var lcx=lcv.getContext('2d');
       lcv.width=window.innerWidth;lcv.height=window.innerHeight;
       window.addEventListener('resize',function(){lcv.width=window.innerWidth;lcv.height=window.innerHeight});
-      var lCH='0123456789ABCDEF20568Hz@#$%&*';
+      var lCH='0123456789ABCDEF4009HXDZ@#$%&*';
       var lFS=13,lD=Array(Math.floor(lcv.width/lFS)).fill(1);
       setInterval(function(){
         lcx.fillStyle='rgba(0,0,0,0.07)';lcx.fillRect(0,0,lcv.width,lcv.height);
@@ -1001,11 +921,8 @@ function getACtx(){if(!_actx){try{_actx=new(window.AudioContext||window.webkitAu
 function playAlarm(){
   try{
     var ac=getACtx();if(!ac)return;
-    /* Police siren: two alternating tones sweeping up/down */
     var duration=2.4;
     var t=ac.currentTime;
-
-    /* Siren oscillator 1 — high sweep */
     var o1=ac.createOscillator(),g1=ac.createGain();
     o1.connect(g1);g1.connect(ac.destination);
     o1.type='sawtooth';
@@ -1018,8 +935,6 @@ function playAlarm(){
     g1.gain.setValueAtTime(0.35,t);
     g1.gain.linearRampToValueAtTime(0,t+duration);
     o1.start(t);o1.stop(t+duration);
-
-    /* Pulse beep overlay — sharp triple beep */
     [0,0.15,0.30].forEach(function(delay){
       var o=ac.createOscillator(),g=ac.createGain();
       o.connect(g);g.connect(ac.destination);
@@ -1066,7 +981,6 @@ var _accessLog=[];
 function logAccess(type){
   var entry={t:new Date().toLocaleTimeString(),type:type,ip:_loggedIP,geo:_loggedGeo};
   _accessLog.push(entry);
-  /* flash IP log panel if open */
   var panel=document.getElementById('ipLogPanel');
   if(panel&&panel.style.display!=='none'){renderLog();}
 }
@@ -1096,12 +1010,10 @@ function triggerAlarm(reason){
   logAccess(reason||'UNAUTHORISED_ACCESS');
   playAlarm();
 
-  /* Build overlay */
   var ov=document.createElement('div');
   ov.id='alarmOverlay';
   ov.style.cssText='position:fixed;inset:0;z-index:999990;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#000;font-family:"Share Tech Mono",monospace;cursor:default;overflow:hidden;';
 
-  /* Flash interval — alternates bg tint */
   var flashState=false;
   _alarmFlash=setInterval(function(){
     flashState=!flashState;
@@ -1110,26 +1022,19 @@ function triggerAlarm(reason){
     ov.style.boxShadow=flashState?'inset 0 0 120px rgba(255,0,0,.18)':'inset 0 0 60px rgba(180,0,0,.08)';
   },350);
 
-  /* Countdown from 10 */
   var countdown=10;
   var cdEl;
 
   ov.innerHTML=
-    /* scanlines overlay */
     '<div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(255,0,0,.04) 2px,rgba(255,0,0,.04) 4px);pointer-events:none;z-index:0"></div>'
-    /* corner brackets */
    +'<div style="position:absolute;top:16px;left:16px;width:40px;height:40px;border-top:2px solid #cc0000;border-left:2px solid #cc0000"></div>'
    +'<div style="position:absolute;top:16px;right:16px;width:40px;height:40px;border-top:2px solid #cc0000;border-right:2px solid #cc0000"></div>'
    +'<div style="position:absolute;bottom:16px;left:16px;width:40px;height:40px;border-bottom:2px solid #cc0000;border-left:2px solid #cc0000"></div>'
    +'<div style="position:absolute;bottom:16px;right:16px;width:40px;height:40px;border-bottom:2px solid #cc0000;border-right:2px solid #cc0000"></div>'
-   /* content */
    +'<div style="position:relative;z-index:1;text-align:center;max-width:640px;padding:2rem;width:100%;">'
-   /* flashing siren icons */
    +'<div style="font-size:2.8rem;margin-bottom:.6rem;letter-spacing:.5em;animation:blink 0.35s step-end infinite">🚨🚨🚨</div>'
-   /* main warning */
    +'<div style="font-family:Orbitron,monospace;font-size:clamp(1.2rem,4vw,2rem);font-weight:900;color:#ff0000;letter-spacing:.12em;text-shadow:0 0 40px rgba(255,0,0,.9),0 0 80px rgba(255,0,0,.4);margin-bottom:.3rem;text-transform:uppercase">⚠ SECURITY BREACH</div>'
    +'<div style="font-family:Orbitron,monospace;font-size:clamp(.7rem,2vw,1rem);font-weight:700;color:#ff6600;letter-spacing:.2em;margin-bottom:1.6rem;text-shadow:0 0 16px rgba(255,102,0,.6)">UNAUTHORISED ACTION DETECTED &amp; LOGGED</div>'
-   /* incident data box */
    +'<div style="background:rgba(20,0,0,.9);border:1px solid #cc0000;border-left:4px solid #ff0000;padding:1.2rem 1.5rem;margin-bottom:1.2rem;text-align:left;">'
    +'<div style="font-size:.6rem;color:#ff6600;letter-spacing:.2em;margin-bottom:.9rem;display:flex;align-items:center;gap:.5rem"><span style="animation:blink .6s step-end infinite;color:#ff0000">●</span> LIVE INCIDENT REPORT — AUTO-GENERATED</div>'
    +'<div style="display:grid;grid-template-columns:150px 1fr;row-gap:.4rem;font-size:.7rem;line-height:1.6;">'
@@ -1141,13 +1046,11 @@ function triggerAlarm(reason){
    +'<span style="color:#442222">FORWARDED TO</span><span style="color:#ff0000">SL POLICE CID · NCMEC · IWF · INTERPOL</span>'
    +'</div>'
    +'</div>'
-   /* legal notice */
    +'<div style="font-size:.62rem;color:#662222;margin-bottom:1.4rem;line-height:1.8;border:1px solid #330000;padding:.7rem 1rem;">'
    +'Accessing, copying or circumventing protected content is a criminal offence<br>'
    +'under Computer Crimes Act No. 24 of 2007 (Sri Lanka) &amp; international law.<br>'
    +'<span style="color:#884422">This incident reference has been automatically submitted to authorities.</span>'
    +'</div>'
-   /* countdown + dismiss */
    +'<div style="display:flex;align-items:center;justify-content:center;gap:1.5rem;flex-wrap:wrap;">'
    +'<div style="font-size:.62rem;color:#442222;letter-spacing:.1em">AUTO-DISMISS IN <span id="alarmCD" style="color:#ff6600;font-weight:bold">10</span>s</div>'
    +'<button onclick="dismissAlarm()" style="font-family:Orbitron,monospace;font-size:.62rem;font-weight:700;letter-spacing:.15em;padding:.7rem 1.8rem;background:rgba(180,0,0,.15);border:1px solid #cc0000;color:#ff2200;cursor:pointer;text-transform:uppercase;box-shadow:0 0 20px rgba(204,0,0,.3);transition:all .2s">I UNDERSTAND — DISMISS</button>'
@@ -1157,14 +1060,12 @@ function triggerAlarm(reason){
   document.body.appendChild(ov);
   cdEl=document.getElementById('alarmCD');
 
-  /* Countdown timer */
   var cdInt=setInterval(function(){
     countdown--;
     if(cdEl)cdEl.textContent=countdown;
     if(countdown<=0){clearInterval(cdInt);dismissAlarm();}
   },1000);
 
-  /* Repeat siren every 2.5s for 3 rounds */
   var sirenCount=0;
   var sirenInt=setInterval(function(){
     sirenCount++;
@@ -1172,7 +1073,6 @@ function triggerAlarm(reason){
     if(sirenCount>=2)clearInterval(sirenInt);
   },2500);
 
-  /* Repeat beeps between sirens */
   var beepCount=0;
   var beepInt=setInterval(function(){
     beepCount++;
@@ -1188,7 +1088,7 @@ window.dismissAlarm=function(){
   if(ov){ov.style.transition='opacity .4s';ov.style.opacity='0';setTimeout(function(){if(ov.parentNode)ov.parentNode.removeChild(ov);},420);}
 };
 
-/* ── IP Log Panel (bottom-left corner) ── */
+/* ── IP Log Panel ── */
 (function buildIPPanel(){
   var panel=document.createElement('div');
   panel.id='ipLogPanel';
@@ -1209,7 +1109,6 @@ window.dismissAlarm=function(){
 
   document.body.appendChild(panel);
 
-  /* Log toggle button */
   var logBtn=document.createElement('button');
   logBtn.id='ipLogBtn';
   logBtn.textContent='📡 ACCESS LOG';
@@ -1223,7 +1122,7 @@ window.dismissAlarm=function(){
   document.body.appendChild(logBtn);
 })();
 
-/* ── Toast (quick events) ── */
+/* ── Toast ── */
 var toastTimer=null;
 function showToast(msg,color){
   var t=document.getElementById('pToast');
