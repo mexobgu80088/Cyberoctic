@@ -626,37 +626,175 @@ var ls={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}
     }
   }catch(e){}
 
-  /* play unlock tone */
-  function playUnlockTone(){
+  /* ── Hiruzick Crime Audio Engine ── */
+  var _lac=null;
+  function getLAC(){if(!_lac){try{_lac=new(window.AudioContext||window.webkitAudioContext)();}catch(e){}}return _lac;}
+
+  /* Ambient crime drone — low cinematic hum that loops on the lock screen */
+  var _ambNodes=[];
+  function startCrimeAmbient(){
     try{
-      var ac=new(window.AudioContext||window.webkitAudioContext)();
-      [440,554,659,880].forEach(function(f,i){
-        var o=ac.createOscillator(),g=ac.createGain();
-        o.connect(g);g.connect(ac.destination);
-        o.type='sine';o.frequency.value=f;
-        var t=ac.currentTime+i*0.12;
-        g.gain.setValueAtTime(0,t);
-        g.gain.linearRampToValueAtTime(0.3,t+0.02);
-        g.gain.linearRampToValueAtTime(0,t+0.1);
-        o.start(t);o.stop(t+0.12);
-      });
+      var ac=getLAC();if(!ac)return;
+      var master=ac.createGain();master.gain.setValueAtTime(0,ac.currentTime);
+      master.gain.linearRampToValueAtTime(0.18,ac.currentTime+2.5);
+      master.connect(ac.destination);
+
+      /* Layer 1 — deep sub drone */
+      var sub=ac.createOscillator(),subG=ac.createGain();
+      sub.type='sine';sub.frequency.setValueAtTime(38,ac.currentTime);
+      sub.frequency.linearRampToValueAtTime(42,ac.currentTime+8);
+      sub.frequency.linearRampToValueAtTime(36,ac.currentTime+16);
+      subG.gain.value=0.55;
+      sub.connect(subG);subG.connect(master);
+      sub.start();_ambNodes.push(sub);
+
+      /* Layer 2 — mid tension string pulse */
+      var str=ac.createOscillator(),strG=ac.createGain();
+      str.type='sawtooth';str.frequency.value=92;
+      var strFilter=ac.createBiquadFilter();
+      strFilter.type='lowpass';strFilter.frequency.value=320;strFilter.Q.value=4;
+      strG.gain.value=0.08;
+      str.connect(strG);strG.connect(strFilter);strFilter.connect(master);
+      str.start();_ambNodes.push(str);
+
+      /* Layer 3 — slow LFO tremolo on string */
+      var lfo=ac.createOscillator(),lfoG=ac.createGain();
+      lfo.type='sine';lfo.frequency.value=0.18;
+      lfoG.gain.value=0.06;
+      lfo.connect(lfoG);lfoG.connect(strG.gain);
+      lfo.start();_ambNodes.push(lfo);
+
+      /* Layer 4 — high eerie whistle shimmer */
+      var whi=ac.createOscillator(),whiG=ac.createGain();
+      whi.type='sine';whi.frequency.setValueAtTime(1240,ac.currentTime);
+      whi.frequency.linearRampToValueAtTime(1180,ac.currentTime+6);
+      whi.frequency.linearRampToValueAtTime(1260,ac.currentTime+13);
+      whiG.gain.value=0.04;
+      var whiFilter=ac.createBiquadFilter();
+      whiFilter.type='bandpass';whiFilter.frequency.value=1200;whiFilter.Q.value=8;
+      whi.connect(whiG);whiG.connect(whiFilter);whiFilter.connect(master);
+      whi.start();_ambNodes.push(whi);
+
+      /* Layer 5 — soft random tick (typewriter / clock) */
+      (function tickLoop(){
+        try{
+          var ac2=getLAC();if(!ac2)return;
+          var buf=ac2.createBuffer(1,ac2.sampleRate*0.04,ac2.sampleRate);
+          var d=buf.getChannelData(0);
+          for(var i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,3)*0.35;
+          var src=ac2.createBufferSource(),tG=ac2.createGain();
+          tG.gain.value=0.22;src.buffer=buf;
+          src.connect(tG);tG.connect(ac2.destination);
+          src.start();
+        }catch(e){}
+        var next=1800+Math.random()*3200;
+        var tid=setTimeout(tickLoop,next);
+        _ambNodes.push({stop:function(){clearTimeout(tid);}});
+      })();
+
+      /* Layer 6 — soft heartbeat pulse every ~1.4s */
+      (function heartLoop(){
+        try{
+          var ac3=getLAC();if(!ac3)return;
+          [0,0.22].forEach(function(delay){
+            var o=ac3.createOscillator(),g=ac3.createGain();
+            o.type='sine';o.frequency.value=55;
+            g.gain.setValueAtTime(0,ac3.currentTime+delay);
+            g.gain.linearRampToValueAtTime(0.28,ac3.currentTime+delay+0.04);
+            g.gain.exponentialRampToValueAtTime(0.001,ac3.currentTime+delay+0.28);
+            o.connect(g);g.connect(ac3.destination);
+            o.start(ac3.currentTime+delay);
+            o.stop(ac3.currentTime+delay+0.30);
+          });
+        }catch(e){}
+        var hid=setTimeout(heartLoop,1400+Math.random()*200);
+        _ambNodes.push({stop:function(){clearTimeout(hid);}});
+      })();
+
+      _ambNodes.push(master);
     }catch(e){}
   }
 
+  function stopCrimeAmbient(){
+    try{
+      var ac=getLAC();
+      _ambNodes.forEach(function(n){try{if(n.stop)n.stop();}catch(e){}});
+      _ambNodes=[];
+      if(ac&&master){master.gain.linearRampToValueAtTime(0,ac.currentTime+1);}
+    }catch(e){}
+  }
+
+  /* Unlock success — soft chime resolution (crime case closed feel) */
+  function playUnlockTone(){
+    try{
+      stopCrimeAmbient();
+      var ac=getLAC();if(!ac)return;
+      /* Soft descending resolution chord */
+      var notes=[
+        {f:523,t:0,   dur:0.6,vol:0.18,type:'sine'},
+        {f:392,t:0.1, dur:0.5,vol:0.14,type:'sine'},
+        {f:330,t:0.2, dur:0.7,vol:0.12,type:'sine'},
+        {f:262,t:0.3, dur:0.9,vol:0.16,type:'sine'},
+        {f:196,t:0.5, dur:1.1,vol:0.10,type:'sine'}
+      ];
+      notes.forEach(function(n){
+        var o=ac.createOscillator(),g=ac.createGain(),rev=ac.createBiquadFilter();
+        rev.type='lowpass';rev.frequency.value=900;
+        o.type=n.type;o.frequency.value=n.f;
+        var t=ac.currentTime+n.t;
+        g.gain.setValueAtTime(0,t);
+        g.gain.linearRampToValueAtTime(n.vol,t+0.06);
+        g.gain.exponentialRampToValueAtTime(0.001,t+n.dur);
+        o.connect(g);g.connect(rev);rev.connect(ac.destination);
+        o.start(t);o.stop(t+n.dur+0.1);
+      });
+      /* Soft static whoosh */
+      var buf=ac.createBuffer(1,ac.sampleRate*0.8,ac.sampleRate);
+      var d=buf.getChannelData(0);
+      for(var i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*0.12*Math.pow(1-i/d.length,2);
+      var ns=ac.createBufferSource(),nf=ac.createBiquadFilter(),ng=ac.createGain();
+      nf.type='bandpass';nf.frequency.value=800;nf.Q.value=0.5;
+      ng.gain.value=0.3;
+      ns.buffer=buf;ns.connect(nf);nf.connect(ng);ng.connect(ac.destination);
+      ns.start(ac.currentTime);
+    }catch(e){}
+  }
+
+  /* Wrong passcode — soft threatening low thud */
   function playWrongTone(){
     try{
-      var ac=new(window.AudioContext||window.webkitAudioContext)();
+      var ac=getLAC();if(!ac)return;
+      /* Low thud */
       var o=ac.createOscillator(),g=ac.createGain();
+      o.type='sine';o.frequency.setValueAtTime(90,ac.currentTime);
+      o.frequency.exponentialRampToValueAtTime(28,ac.currentTime+0.35);
+      g.gain.setValueAtTime(0.38,ac.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.4);
       o.connect(g);g.connect(ac.destination);
-      o.type='sawtooth';o.frequency.value=120;
-      g.gain.setValueAtTime(0.35,ac.currentTime);
-      g.gain.linearRampToValueAtTime(0,ac.currentTime+0.3);
-      o.start(ac.currentTime);o.stop(ac.currentTime+0.32);
+      o.start(ac.currentTime);o.stop(ac.currentTime+0.42);
+      /* Soft distorted scrape */
+      var o2=ac.createOscillator(),g2=ac.createGain(),f2=ac.createBiquadFilter();
+      o2.type='sawtooth';o2.frequency.setValueAtTime(180,ac.currentTime);
+      o2.frequency.linearRampToValueAtTime(60,ac.currentTime+0.3);
+      f2.type='lowpass';f2.frequency.value=400;
+      g2.gain.setValueAtTime(0.12,ac.currentTime);
+      g2.gain.exponentialRampToValueAtTime(0.001,ac.currentTime+0.32);
+      o2.connect(g2);g2.connect(f2);f2.connect(ac.destination);
+      o2.start(ac.currentTime);o2.stop(ac.currentTime+0.35);
     }catch(e){}
   }
 
   window.addEventListener('load',function(){
     document.body.style.overflow='hidden';
+    /* Start ambient after first user interaction to satisfy autoplay policy */
+    var startedAmb=false;
+    function tryStartAmb(){
+      if(startedAmb)return;startedAmb=true;
+      setTimeout(startCrimeAmbient,400);
+    }
+    document.addEventListener('click',tryStartAmb,{once:true});
+    document.addEventListener('keydown',tryStartAmb,{once:true});
+    document.getElementById('lockInput').addEventListener('focus',tryStartAmb,{once:true});
     setTimeout(function(){var inp=document.getElementById('lockInput');if(inp)inp.focus();},300);
   });
 
